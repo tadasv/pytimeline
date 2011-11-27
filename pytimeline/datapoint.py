@@ -97,3 +97,61 @@ class DataPoint(object):
             self.__setitem__('_dt', IntegerDateTime())
         else:
             self.__setitem__('_dt', dt)
+
+
+class DataPointIterator(object):
+    def __init__(self, list_iterator, cast_to_dict=True):
+        self._cast_to_dict= cast_to_dict
+        self._list_iterator = list_iterator
+
+
+    def __iter__(self):
+        return self
+
+
+    def next(self):
+        item = self._list_iterator.next()
+        if self._cast_to_dict:
+            return item.to_dict()
+        return item
+
+
+class DataPointContainer(object):
+    def __init__(self, cast_to_dict=True):
+        self._container = []
+        self._cast_to_dict = cast_to_dict
+
+    def __len__(self):
+        return len(self._container)
+
+
+    def __iter__(self):
+        return DataPointIterator(self._container.__iter__(),
+                                 self._cast_to_dict)
+
+    def __getitem__(self, key):
+        item = self._container[key]
+        if self._cast_to_dict:
+            return item.to_dict()
+        return item
+
+
+    @classmethod
+    def _assert_correct_data_type(cls, data):
+        if not isinstance(data, DataPoint):
+            raise TypeError('DataPoint instance expected')
+
+
+    def append(self, data):
+        self.__class__._assert_correct_data_type(data)
+        return self._container.append(data)
+
+
+    def insert(self, i, data):
+        self.__class__._assert_correct_data_type(data)
+        return self._container.insert(i, data)
+
+
+    def clear(self):
+        del self._container
+        self._container = []

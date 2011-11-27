@@ -61,5 +61,53 @@ class TestDataPoint(unittest.TestCase):
         self.assertTrue(isinstance(dpdict['_dt'], long))
 
 
+class TestDataPointContainer(unittest.TestCase):
+    def test_container(self):
+        """ Test container, add/remove etc. """
+        dpcontainer = datapoint.DataPointContainer()
+        self.assertEqual(len(dpcontainer), 0)
+
+        try:
+            dpcontainer.append(1)
+        except TypeError:
+            pass
+
+        dp = datapoint.DataPoint()
+        dpcontainer.append(dp)
+        self.assertEqual(len(dpcontainer), 1)
+
+        try:
+            dpcontainer.insert(1, 1)
+        except TypeError:
+            pass
+
+        dpcontainer.insert(1, datapoint.DataPoint())
+        self.assertEqual(len(dpcontainer), 2)
+
+        dpcontainer.clear()
+        self.assertEqual(len(dpcontainer), 0)
+
+
+    def test_iterator(self):
+        dpcontainer = datapoint.DataPointContainer(cast_to_dict=False)
+        l = [
+            datapoint.DataPoint(),
+            datapoint.DataPoint(),
+            datapoint.DataPoint()
+        ]
+
+        for i in l:
+            dpcontainer.append(i)
+
+        for i in range(len(dpcontainer)):
+            self.assertEqual(l[i], dpcontainer[i])
+
+
+        counter = 0
+        for i in dpcontainer:
+            counter += 1
+        self.assertEqual(counter, 3)
+
+
 if __name__ == '__main__':
     unittest.main()
