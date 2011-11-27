@@ -28,7 +28,7 @@ class IntegerDateTime(object):
 
     def from_datetime(self, date_obj):
         self._date = 0L
-        self._date += (date_obj.year & 0xfff) << 40
+        self._date += (date_obj.year & 0xffff) << 40
         self._date += (date_obj.month & 0xff) << 32
         self._date += (date_obj.day & 0xff) << 24
         self._date += (date_obj.hour & 0xff) << 16
