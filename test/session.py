@@ -22,12 +22,17 @@ class TestSession(unittest.TestCase):
         self.session.add(dp1)
         self.session.flush()
         self.assertEqual(self.connection[self.database][self.collection].find().count(), 1)
+        self.assertTrue('_id' in dp1)
 
         # Try adding multiple documents at once
-        self.session.add(dp1)
-        self.session.add(dp1)
+        dp2 = datapoint.DataPoint()
+        dp3 = datapoint.DataPoint()
+        self.session.add(dp2)
+        self.session.add(dp3)
         self.session.flush()
         self.assertEqual(self.connection[self.database][self.collection].find().count(), 3)
+        self.assertTrue('_id' in dp2)
+        self.assertTrue('_id' in dp3)
 
 if __name__ == '__main__':
     unittest.main()

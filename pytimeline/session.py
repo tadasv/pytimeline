@@ -14,7 +14,7 @@ class Session(object):
         self._database = None
         self._collection = None
         # A list of objects that we want to add to the database
-        self._modified_objects = DataPointContainer(cast_to_dict=True)
+        self._modified_objects = DataPointContainer(cast_to_dict=False)
 
 
     def use_collection(self, database, collection):
@@ -40,5 +40,8 @@ class Session(object):
         Writes changes to the database
 
         """
-        self._collection.insert(self._modified_objects)
+        result = self._collection.insert(self._modified_objects.dict_generator())
+        for i in xrange(len(result)):
+            obj = self._modified_objects[i]
+            obj['_id'] = result[i]
         self._modified_objects.clear()

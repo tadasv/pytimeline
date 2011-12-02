@@ -155,3 +155,8 @@ class DataPointContainer(object):
     def clear(self):
         del self._container
         self._container = []
+
+
+    def dict_generator(self):
+        for item in self._container:
+            yield item.to_dict()
