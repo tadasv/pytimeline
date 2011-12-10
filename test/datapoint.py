@@ -3,17 +3,6 @@ import datetime
 from pytimeline import datapoint
 
 
-class TestIntegerDateTime(unittest.TestCase):
-    def test_conversion(self):
-        d1 = datetime.datetime(2011, 11, 11, 11, 11, 11)
-        id1 = datapoint.IntegerDateTime(2011, 11, 11, 11, 11, 11)
-        self.assertEqual(d1, id1.to_datetime())
-
-        id2 = datapoint.IntegerDateTime()
-        id2.from_datetime(d1)
-        self.assertEqual(d1, id2.to_datetime())
-
-
 class TestDataPoint(unittest.TestCase):
     def test_constructors(self):
         dt = datapoint.DataPoint()
@@ -35,7 +24,7 @@ class TestDataPoint(unittest.TestCase):
         self.assertRaises(TypeError, datapoint.DataPoint, test_dict)
 
         # Test datapoint with valid datetime
-        test_dict['_dt'] = datapoint.IntegerDateTime()
+        test_dict['_dt'] = datetime.datetime.today()
         dt = datapoint.DataPoint(test_dict)
 
 
@@ -47,18 +36,18 @@ class TestDataPoint(unittest.TestCase):
         except TypeError:
             pass
 
-        idt = datapoint.IntegerDateTime()
-        dp['_dt'] = idt
+        dt = datetime.datetime.today()
+        dp['_dt'] = dt
         self.assertTrue(isinstance(dp['_dt'],
-                        datapoint.IntegerDateTime))
+                        datetime.datetime))
 
-        self.assertEqual(dp['_dt'], idt)
+        self.assertEqual(dp['_dt'], dt)
         dpdict = dp.to_dict()
-        self.assertEqual(dpdict['_dt'], long(idt))
+        self.assertEqual(dpdict['_dt'], dt)
 
         del dp['_dt']
         dpdict = dp.to_dict()
-        self.assertTrue(isinstance(dpdict['_dt'], long))
+        self.assertTrue(isinstance(dpdict['_dt'], datetime.datetime))
 
 
 class TestDataPointContainer(unittest.TestCase):
