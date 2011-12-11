@@ -4,7 +4,7 @@
 .. automodule:: pytimeline
    :synopsis: MongoDB time series in Python
 
-   .. autodata:: version
+   .. autodata:: __version__
 
 
 Sub-modules:

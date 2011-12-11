@@ -1,8 +1,12 @@
 """MongoDB time series in Python."""
 
-version_tuple = (0, 1)
+__version_tuple__ = (0, 0, 1)
 
 def get_version_string():
-    return '.'.join(map(str, version_tuple))
+    """
+    Format version tuple as a string.
 
-version = get_version_string()
+    """
+    return '.'.join([str(x) for x in __version_tuple__])
+
+__version__ = get_version_string()
