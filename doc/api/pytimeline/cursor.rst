@@ -1,5 +1,5 @@
 :mod:`pytimeline.cursor` -- Tools for iterating over time series
-=====================================================
+================================================================
 
 .. automodule:: pytimeline.cursor
    :synopsis: Tools for iterating over time series results

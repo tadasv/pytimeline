@@ -13,3 +13,4 @@ Sub-modules:
    :maxdepth: 2
 
    cursor
+   collection
