@@ -14,3 +14,4 @@ Sub-modules:
 
    cursor
    collection
+   database

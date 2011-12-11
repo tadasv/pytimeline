@@ -1,4 +1,4 @@
-:mod:`pytimeline.collection` -- Collection level operarions
+:mod:`pytimeline.collection` -- Collection level operations
 ===========================================================
 
 .. automodule:: pytimeline.collection
