@@ -15,3 +15,4 @@ Sub-modules:
    cursor
    collection
    database
+   datapoint

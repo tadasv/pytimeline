@@ -4,6 +4,7 @@ from pytimeline import datapoint
 
 
 class TestDataPoint(unittest.TestCase):
+
     def test_constructors(self):
         dt = datapoint.DataPoint()
         self.assertTrue('_dt' in dt)
@@ -31,8 +32,15 @@ class TestDataPoint(unittest.TestCase):
     def test_data_access(self):
         dp = datapoint.DataPoint()
 
+        # Checks for invalid timestamp key values
+        # work only in constructors. Checks are not performed
+        # at __setitem__ due to the possibility of nested timestamp.
+        # However, the timestamp check will be perfoemd when converting
+        # DataPoint to dict before pushing it to mongodb.
+        dp['_dt'] = 'invalid'
         try:
-            dp['_dt'] = 'invalid'
+            dp.to_dict()
+            raise Exception('Supposed to raise TypeError')
         except TypeError:
             pass
 
@@ -45,9 +53,9 @@ class TestDataPoint(unittest.TestCase):
         dpdict = dp.to_dict()
         self.assertEqual(dpdict['_dt'], dt)
 
-        del dp['_dt']
-        dpdict = dp.to_dict()
-        self.assertTrue(isinstance(dpdict['_dt'], datetime.datetime))
+        # Test nested time stamps
+
+
 
 
 if __name__ == '__main__':
