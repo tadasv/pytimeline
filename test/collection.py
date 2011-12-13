@@ -31,5 +31,29 @@ class TestCollection(unittest.TestCase):
             self.assertTrue(isinstance(i, DataPoint))
 
 
+    def test_data_inserts(self):
+        col = Collection(self.connection[self.database], self.collection)
+
+        # Test simple data insertion operations
+        # DataPoint is only supported data type + lists
+        try:
+            col.insert({'test' : 123})
+            raise Exception('Supposed to fail with type error')
+        except TypeError:
+            pass
+
+        try:
+            col.insert({'test' : 123})
+            raise Exception('Supposed to fail with type error')
+        except TypeError:
+            pass
+
+        dp = DataPoint()
+        dp['test'] = 123
+        self.assertTrue(col.insert(dp))
+        self.assertTrue(col.insert([dp]))
+
+
+
 if __name__ == '__main__':
     unittest.main()
