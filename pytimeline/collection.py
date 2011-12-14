@@ -41,3 +41,23 @@ class Collection(PymongoCollection):
             raise TypeError('docs_or_docs must a an instance or a list of DataPoint')
 
         return super(Collection, self).insert(docs, *args, **kwargs)
+
+
+    def save(self, to_save, **kwargs):
+        # TODO make manipulate work on DataPoint
+        if not isinstance(to_save, DataPoint):
+            raise TypeError("to_save must be an instance of DataPoint")
+
+        if '_id' not in to_save:
+            return self.insert(to_save, **kwargs)
+        else:
+            self.update({'_id' : to_save['_id']}, to_save, **kwargs)
+            return to_save['_id']
+
+
+    def update(self, spec, document, **kwargs):
+        # TODO make manipulate work on DataPoint
+        if not isinstance(document, DataPoint):
+            raise TypeError("document must be an instance of DataPoint")
+
+        return super(Collection, self).update(spec, document.to_dict(), **kwargs)

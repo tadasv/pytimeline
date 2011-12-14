@@ -43,7 +43,7 @@ class TestCollection(unittest.TestCase):
             pass
 
         try:
-            col.insert({'test' : 123})
+            col.insert([{'test' : 123}])
             raise Exception('Supposed to fail with type error')
         except TypeError:
             pass
@@ -52,6 +52,32 @@ class TestCollection(unittest.TestCase):
         dp['test'] = 123
         self.assertTrue(col.insert(dp))
         self.assertTrue(col.insert([dp]))
+
+        # Test update operation
+        self.assertRaises(TypeError, col.update, {'test': 123}, {'key': 333})
+        col.update({'test': 123}, DataPoint({'test' : 123, 'key' : 'value'}))
+        # A bit hacky way to get the updated DataPoint.
+        # We have to always make sure that there are no other DataPoints
+        # with 'test'==123 since we cannot get back the _id since the
+        # manipulate is not supported on DataPoint yet.
+        obj = col.find({'test' : 123})[0]
+        self.assertEqual(obj['key'], 'value')
+
+        # Test save operation
+        self.assertRaises(TypeError, col.save, {'key' : 123})
+        self.assertEqual(col.find({'save_test' : 'new_datapoint'}).count(), 0)
+        col.save(DataPoint({'save_test' : 'new_datapoint'}))
+        results = col.find({'save_test' : 'new_datapoint'})
+        self.assertEqual(results.count(), 1)
+        tmp_dp = results[0]
+        self.assertTrue('_id' in tmp_dp)
+        tmp_dp['update_test'] = 123
+        col.save(tmp_dp)
+        results = col.find({'save_test' : 'new_datapoint'})
+        self.assertEqual(results.count(), 1)
+        tmp_dp = results[0]
+        self.assertEqual(tmp_dp['update_test'], 123)
+
 
 
 
