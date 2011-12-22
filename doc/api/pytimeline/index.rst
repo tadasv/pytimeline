@@ -16,3 +16,4 @@ Sub-modules:
    collection
    database
    datapoint
+   naming
