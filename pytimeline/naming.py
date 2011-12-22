@@ -1,4 +1,5 @@
 import datetime
+import calendar
 
 def monthly_name(prefix, date):
     """
@@ -130,3 +131,20 @@ class DailyGenerator(Generator):
     @staticmethod
     def get_day_delta(date):
         return 1
+
+
+
+class MonthlyGenerator(Generator):
+    """
+    Generator that generates monthly names.
+
+    """
+    @staticmethod
+    def get_name(prefix, date):
+        return monthly_name(prefix, date)
+
+
+    @staticmethod
+    def get_day_delta(date):
+        days_in_month = calendar.monthrange(date.year, date.month)[1]
+        return (days_in_month - date.day + 1)

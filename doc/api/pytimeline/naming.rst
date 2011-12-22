@@ -9,3 +9,6 @@
 
    .. autoclass:: pytimeline.naming.DailyGenerator
       :members:
+
+   .. autoclass:: pytimeline.naming.MonthlyGenerator
+      :members:

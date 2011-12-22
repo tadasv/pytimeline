@@ -39,6 +39,18 @@ class TestNaming(unittest.TestCase):
                             "p2011033",
                         ])
 
+        # Test monthly generator
+        gen = naming.MonthlyGenerator("p", datetime.date(2011, 1, 13),
+                                           datetime.date(2011, 5, 23))
+        names = gen.get_list()
+        self.assertEqual(names, [
+                "p201101",
+                "p201102",
+                "p201103",
+                "p201104",
+                "p201105",
+            ])
+
 
 if __name__ == '__main__':
     unittest.main()
