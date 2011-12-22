@@ -12,3 +12,6 @@
 
    .. autoclass:: pytimeline.naming.MonthlyGenerator
       :members:
+
+   .. autoclass:: pytimeline.naming.YearlyGenerator
+      :members:

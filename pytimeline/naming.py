@@ -148,3 +148,23 @@ class MonthlyGenerator(Generator):
     def get_day_delta(date):
         days_in_month = calendar.monthrange(date.year, date.month)[1]
         return (days_in_month - date.day + 1)
+
+
+class YearlyGenerator(Generator):
+    """
+    Generator that generates yearly names.
+
+    """
+    @staticmethod
+    def get_name(prefix, date):
+        return yearly_name(prefix, date)
+
+
+    @staticmethod
+    def get_day_delta(date):
+        if calendar.isleap(date.year):
+            days_in_year = 366
+        else:
+            days_in_year = 365
+
+        return (days_in_year - date.timetuple().tm_yday + 1)

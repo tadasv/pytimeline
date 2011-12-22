@@ -51,6 +51,19 @@ class TestNaming(unittest.TestCase):
                 "p201105",
             ])
 
+        # Test yearly generator
+        gen = naming.YearlyGenerator("p", datetime.date(2004, 12, 31),
+                                          datetime.date(2009, 5, 13))
+        names = gen.get_list()
+        self.assertEqual(names, [
+                "p2004",
+                "p2005",
+                "p2006",
+                "p2007",
+                "p2008",
+                "p2009",
+            ])
+
 
 if __name__ == '__main__':
     unittest.main()
