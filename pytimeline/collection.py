@@ -31,14 +31,16 @@ class Collection(PymongoCollection):
             docs = [docs.to_dict()]
         elif isinstance(docs, list):
             new_docs = []
-            for x in docs:
-                if not isinstance(x, DataPoint):
-                    raise TypeError('docs_or_docs must a an instance or a list of DataPoint')
-                new_docs.append(x.to_dict())
+            for doc in docs:
+                if not isinstance(doc, DataPoint):
+                    raise TypeError('docs_or_docs must a an instance or a list '
+                                    'of DataPoint')
+                new_docs.append(doc.to_dict())
 
             docs = new_docs
         else:
-            raise TypeError('docs_or_docs must a an instance or a list of DataPoint')
+            raise TypeError('docs_or_docs must a an instance or a list of '
+                            'DataPoint')
 
         return super(Collection, self).insert(docs, *args, **kwargs)
 
@@ -60,4 +62,5 @@ class Collection(PymongoCollection):
         if not isinstance(document, DataPoint):
             raise TypeError("document must be an instance of DataPoint")
 
-        return super(Collection, self).update(spec, document.to_dict(), **kwargs)
+        return super(Collection, self).update(spec, document.to_dict(),
+                                              **kwargs)

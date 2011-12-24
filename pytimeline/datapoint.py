@@ -54,12 +54,17 @@ class DataPoint(object):
         try:
             datetime_value = self._get_datetime_value()
             if not isinstance(datetime_value, datetime.datetime):
-                raise TypeError('datetime value must be an instance of datetime.datetime')
+                raise TypeError('datetime value must be an instance of '
+                                'datetime.datetime')
         except KeyError:
             self._set_datetime_value(datetime.datetime.today())
 
 
     def _get_datetime_value(self):
+        """
+        Get date and time of the document.
+
+        """
         if isinstance(self._datetime_key, (str, unicode)):
             return self._data[self._datetime_key]
         elif isinstance(self._datetime_key, (list, tuple)):
@@ -76,22 +81,42 @@ class DataPoint(object):
 
 
     def _set_datetime_value(self, value):
+        """
+        Set date and time of the document.
+
+        :Parameters:
+          - `value`: instance of :class:`datetime.datetime`.
+
+        """
         if not isinstance(value, datetime.datetime):
-            raise TypeError('datetime value must be an instance of datetime.datetime')
+            raise TypeError('datetime value must be an instance of '
+                            'datetime.datetime')
 
         if isinstance(self._datetime_key, (str, unicode)):
             self._data[self._datetime_key] = value
         elif isinstance(self._datetime_key, (list, tuple)):
 
             def __set_value(branch, keys, value):
+                """
+                Recursivelly traverse `branch` until the end of `keys` is
+                reached and set the value.
+
+                :Parameters:
+                  - `branch`: dictionary
+                  - `keys`: a list of keys that define path to the key to be set
+                  - `value`: a value to store
+
+                """
                 if len(keys) == 1:
                     branch[keys[0]] = value
                     return branch
                 key = keys.pop(0)
-                branch.update(__set_value(branch.setdefault(key, {}), keys, value))
+                branch.update(__set_value(branch.setdefault(key, {}), keys,
+                                          value))
                 return branch
 
-            self._data = __set_value(self._data, list(self._datetime_key), value)
+            self._data = __set_value(self._data, list(self._datetime_key),
+                                     value)
         else:
             raise TypeError("datetime key must be a string or iterable")
 
@@ -122,7 +147,8 @@ class DataPoint(object):
         try:
             datetime_value = self._get_datetime_value()
             if not isinstance(datetime_value, datetime.datetime):
-                raise TypeError('datetime value must be an instance of datetime.datetime')
+                raise TypeError('datetime value must be an instance of '
+                                'datetime.datetime')
         except KeyError:
             self._set_datetime_value(datetime.datetime.today())
 
