@@ -24,7 +24,6 @@ class Collection(PymongoCollection):
 
     def insert(self, doc_or_docs, *args, **kwargs):
 
-        # TODO make manupulate work on DataPoint
         docs = doc_or_docs
 
         if isinstance(docs, DataPoint):
@@ -42,11 +41,19 @@ class Collection(PymongoCollection):
             raise TypeError('docs_or_docs must a an instance or a list of '
                             'DataPoint')
 
-        return super(Collection, self).insert(docs, *args, **kwargs)
+        result = super(Collection, self).insert(docs, *args, **kwargs)
+        if len(result) == 1 and isinstance(doc_or_docs, DataPoint):
+            doc_or_docs['_id'] = result[0]
+        elif len(result) == 1:
+            doc_or_docs[0]['_id'] = result[0]
+        else:
+            for i in range(len(result)):
+                doc_or_docs[i]['_id'] = result[i]
+
+        return result
 
 
     def save(self, to_save, **kwargs):
-        # TODO make manipulate work on DataPoint
         if not isinstance(to_save, DataPoint):
             raise TypeError("to_save must be an instance of DataPoint")
 
@@ -58,7 +65,6 @@ class Collection(PymongoCollection):
 
 
     def update(self, spec, document, **kwargs):
-        # TODO make manipulate work on DataPoint
         if not isinstance(document, DataPoint):
             raise TypeError("document must be an instance of DataPoint")
 

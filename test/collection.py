@@ -50,8 +50,12 @@ class TestCollection(unittest.TestCase):
 
         dp = DataPoint()
         dp['test'] = 123
+        dp2 = DataPoint()
+        dp2['test2'] = 123
         self.assertTrue(col.insert(dp))
-        self.assertTrue(col.insert([dp]))
+        self.assertTrue(dp['_id'])
+        self.assertTrue(col.insert([dp2]))
+        self.assertTrue(dp2['_id'])
 
         # Test update operation
         self.assertRaises(TypeError, col.update, {'test': 123}, {'key': 333})
