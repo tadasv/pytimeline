@@ -83,6 +83,57 @@ class TestCollection(unittest.TestCase):
         self.assertEqual(tmp_dp['update_test'], 123)
 
 
+    def test_range_queries(self):
+        col = Collection(self.connection[self.database], self.collection)
+        col.remove()
+
+        datapoints = []
+        day_offset = 0
+        for i in range(10):
+            dp = DataPoint()
+            dp['_dt'] = datetime.datetime(2011, 1, 28) + \
+                                datetime.timedelta(day_offset)
+            datapoints.append(dp)
+            day_offset += 1
+
+        col.insert(datapoints)
+        self.assertEqual(col.find().count(), 10)
+
+        res = col.find_range(('_dt', ), datetime.datetime(2011, 1, 28),
+                                        datetime.datetime(2011, 1, 31))
+        self.assertEqual(res.count(), 4)
+        day_offset = 0
+        for dp in res:
+            self.assertEqual(dp['_dt'], datetime.datetime(2011, 1, 28) + \
+                                            datetime.timedelta(day_offset))
+            day_offset += 1
+
+
+        # Test range queries when datetime key is nested
+        col.remove()
+        self.assertEqual(col.find().count(), 0)
+        datapoints = []
+        day_offset = 0
+        for i in range(10):
+            dp = DataPoint(datetime_key=('_id', '_dt'))
+            dp.set_datetime(datetime.datetime(2011, 1, 28) + \
+                            datetime.timedelta(day_offset))
+            datapoints.append(dp)
+            day_offset += 1
+
+        col.insert(datapoints)
+        self.assertEqual(col.find().count(), 10)
+
+        res = col.find_range(('_id', '_dt'), datetime.datetime(2011, 1, 30),
+                                             datetime.datetime(2011, 2, 1))
+        self.assertEqual(res.count(), 3)
+        day_offset = 0
+        for dp in res:
+            self.assertEqual(dp['_id']['_dt'],
+                datetime.datetime(2011, 1, 30) + datetime.timedelta(day_offset))
+            day_offset += 1
+
+
 
 
 if __name__ == '__main__':

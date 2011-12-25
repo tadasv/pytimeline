@@ -5,6 +5,7 @@ Collection level utilities for PyTimeline.
 from pymongo.collection import Collection as PymongoCollection
 from pytimeline.cursor import Cursor
 from pytimeline.datapoint import DataPoint
+from pytimeline.util import set_value_rec
 
 class Collection(PymongoCollection):
     """
@@ -20,6 +21,38 @@ class Collection(PymongoCollection):
 
         """
         return Cursor(self, *args, **kwargs)
+
+
+    def find_range(self, dt_path, start, end, extras=None):
+        """
+        Find documents which have timestamps in range
+        [`start`, `end`].
+
+        :Parameters:
+          - `dt_path`: iterable that defines path to date time field.
+          - `start`: start date. instance of :class:`datetime.datetime`.
+          - `end`: end date. instance of :class:`datetime.datetime`.
+
+        """
+
+        path = list(dt_path)
+        first_key = path.pop(0)
+        query = {}
+
+        if len(path) == 0:
+            query[first_key] = {
+                '$gte' : start,
+                '$lte' : end,
+            }
+        else:
+            query[first_key] = {
+                '$gte' : set_value_rec({}, path, start),
+                '$lte' : set_value_rec({}, path, end),
+            }
+
+        if extras:
+            query.update(extras)
+        return self.find(query)
 
 
     def insert(self, doc_or_docs, *args, **kwargs):
