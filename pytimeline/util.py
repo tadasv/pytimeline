@@ -18,7 +18,8 @@ def set_value_rec(branch, keys, value):
         branch[keys[0]] = value
         return branch
     key = keys.pop(0)
-    branch.update(set_value_rec(branch.setdefault(key, {}), keys,
-                                value))
+    res = set_value_rec(branch.setdefault(key, {}), keys,
+                                value)
+    branch[key].update(res)
     return branch
 
