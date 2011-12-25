@@ -1,3 +1,7 @@
+"""
+Tools and utilities for generating database/collection names.
+"""
+
 import datetime
 import calendar
 
