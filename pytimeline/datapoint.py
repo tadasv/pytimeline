@@ -4,6 +4,8 @@ Document level related operations.
 
 import datetime
 
+from pytimeline.util import set_value_rec
+
 class DataPoint(object):
     """
     Document level abstaction.
@@ -96,27 +98,9 @@ class DataPoint(object):
             self._data[self._datetime_key] = value
         elif isinstance(self._datetime_key, (list, tuple)):
 
-            def __set_value(branch, keys, value):
-                """
-                Recursivelly traverse `branch` until the end of `keys` is
-                reached and set the value.
 
-                :Parameters:
-                  - `branch`: dictionary
-                  - `keys`: a list of keys that define path to the key to be set
-                  - `value`: a value to store
-
-                """
-                if len(keys) == 1:
-                    branch[keys[0]] = value
-                    return branch
-                key = keys.pop(0)
-                branch.update(__set_value(branch.setdefault(key, {}), keys,
-                                          value))
-                return branch
-
-            self._data = __set_value(self._data, list(self._datetime_key),
-                                     value)
+            self._data = set_value_rec(self._data, list(self._datetime_key),
+                                       value)
         else:
             raise TypeError("datetime key must be a string or iterable")
 
