@@ -17,3 +17,4 @@ Sub-modules:
    database
    datapoint
    naming
+   util
